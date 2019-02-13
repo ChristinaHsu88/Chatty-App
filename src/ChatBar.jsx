@@ -19,6 +19,7 @@ class ChatBar extends Component {
     const content = event.target.content.value;
     // const newMessage = {};
     this.props.addNewMessage(username, content);
+    this.props.onNewMessage(username, content);
     
   }
 
