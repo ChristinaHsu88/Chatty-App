@@ -7,28 +7,49 @@ import MessageList from './MessageList.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true};
+    this.state = {
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+        messages: [
+          {
+            username: "Bob",
+            content: "Has anyone seen my marbles?",
+            id: 'a'
+          },
+          {
+            username: "Anonymous",
+            content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
+            id: 'b'
+          }
+        ]
+      };
+      this.addNewMessage = this.addNewMessage.bind(this);
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({loading: false});
-    }, 3000)
+  addNewMessage(message) {
+    this.setState({messages: [...this.state.messages, message]});
+    
   }
+  //deinfed function that set it to children this.props.
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+    setTimeout(() => {
+      console.log("Simulating incoming message");
+
+    }, 3000);
+  }
+
   render() {
-    if (this.state.loading) {
-      return <h1>Loading...</h1>
-    } else {
+      const currentUser = this.state.currentUser.name;
+      let messages = this.state.messages;
       return (
         <div>
           <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-          <MessageList />
-          <ChatBar />
+          <MessageList messages={messages}/>
+          <ChatBar currentUser={currentUser} addNewMessage={this.addNewMessage}/>
         </div>
     );
-  }
   }
 }
 export default App;
