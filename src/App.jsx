@@ -24,26 +24,17 @@ class App extends Component {
           // }
         ]
       };
-      this.addNewMessage = this.addNewMessage.bind(this);
       this.onNewMessage = this.onNewMessage.bind(this);
       this.changeDefaultUser = this.changeDefaultUser.bind(this);
+      this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   changeDefaultUser(username) {
     if (username !== this.state.currentUser.name) {
       const notification = {type: "postNotification", content: this.state.currentUser.name + " has changed their name to " + username}
-      //console.log('printing username', username);
       let newNotify = JSON.stringify(notification);
       this.socket.send(newNotify);
       this.setState({currentUser: {name: username}});
-      //console.log(notification);
-    }
-  }
-
-  addNewMessage(username, content) {
-    if (username && content) {
-      const message = {username: username, content: content, id: Date.now()};
-      //this.setState({messages: [...this.state.messages, message]});
     }
   }
 
@@ -51,7 +42,7 @@ class App extends Component {
   //adding type to the message
   onNewMessage(username, content) {
     if (username && content) { 
-      console.log(username, content);
+      //console.log(username, content);
       const newMessage = {username: username, content: content, type: "postMessage"};
       let newMsg = JSON.stringify(newMessage);
       this.socket.send(newMsg);
@@ -62,25 +53,34 @@ class App extends Component {
   componentDidMount() {
     console.log("componentDidMount <App />");
     
-    
+    // let online = 0;
     this.socket.onopen = () => {
       console.log('connected to server');
-      
     }
 
     this.socket.onmessage = (message) => {
-      console.log("message", message);
-      //console.log(message.data);
-      const newData = JSON.parse(message.data);
-      //console.log(newData);
-      this.setState({messages: [...this.state.messages, newData]})
-    }
-    
-    
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
+      let userOnline = JSON.parse(message.data);
+      console.log(userOnline.num);
+      if (userOnline.type === "onlineNums") {
+        this.setState({currentUserNum: userOnline.num });
+        console.log('numbers of users online', this.state);
+      }
+      
+      if (userOnline.type === "incomingMessage") {
+        this.setState({messages: [...this.state.messages, userOnline]})
+        console.log('new message', this.state);
+      }
 
-    // }, 3000);
+      if (userOnline.type === "incomingNotification") {
+        this.setState({messages: [...this.state.messages, userOnline]})
+        console.log('new notification', this.state);
+      }
+
+      if (userOnline.type === "closing windows") {
+        this.setState({currentUserNum: userOnline.num });
+        console.log('numbers of users online', this.state);
+      }
+    }
   }
 
 
@@ -89,15 +89,30 @@ class App extends Component {
       const currentUser = this.state.currentUser.name;
       let messages = this.state.messages;
       let user = this.state.currentUser.name;
-      //console.log(messages);
+      let number = this.state.currentUserNum;
+      console.log(this.state);
+      console.log('showing the rendering numbers', number);
+      //console.log(number);
       
+      //console.log(this.messages.num);
+      
+
+      //let num = this.state.currentUserNum;
+      //console.log(this.props.currentUserNum);
+      // let currentUserNum = this.state.currentUserNum.num; //online number
+      // console.log(currentUserNum);
+      // console.log('this is the state', this.state);
+      // console.log('this is the first object', this.state.currentUserNum); //showing the object
+      
+      // console.log('this is the number', this.state.currentUserNum.num); //error. where to access this
       return (
         <div>
           <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
-        </nav>
+          <span className="userCount">{number} user(s) online</span>
+          </nav>
           <MessageList messages={messages} user={user}/>
-          <ChatBar currentUser={currentUser} addNewMessage={this.addNewMessage} onNewMessage={this.onNewMessage} changeDefaultUser={this.changeDefaultUser}/>
+          <ChatBar currentUser={currentUser}  onNewMessage={this.onNewMessage} changeDefaultUser={this.changeDefaultUser}/>
         </div>
     );
   }
