@@ -26,8 +26,14 @@ class App extends Component {
       };
       this.addNewMessage = this.addNewMessage.bind(this);
       this.onNewMessage = this.onNewMessage.bind(this);
+      this.changeDefaultUser = this.changeDefaultUser.bind(this);
   }
 
+  changeDefaultUser(username) {
+    if (username !== this.state.currentUser.name) {
+      console.log('printing username', username);
+    }
+  }
 
   addNewMessage(username, content) {
     if (username && content) {
@@ -36,10 +42,12 @@ class App extends Component {
     }
   }
 
+
+  //adding type to the message
   onNewMessage(username, content) {
-    if (username && content) {
+    if (username && content) { 
       console.log(username, content);
-      const newMessage = {username: username, content: content};
+      const newMessage = {username: username, content: content, type: "postMessage"};
       let newMsg = JSON.stringify(newMessage);
       this.socket.send(newMsg);
     }
@@ -83,7 +91,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
           <MessageList messages={messages}/>
-          <ChatBar currentUser={currentUser} addNewMessage={this.addNewMessage} onNewMessage={this.onNewMessage} />
+          <ChatBar currentUser={currentUser} addNewMessage={this.addNewMessage} onNewMessage={this.onNewMessage} changeDefaultUser={this.changeDefaultUser}/>
         </div>
     );
   }

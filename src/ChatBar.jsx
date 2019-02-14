@@ -20,7 +20,7 @@ class ChatBar extends Component {
     // const newMessage = {};
     this.props.addNewMessage(username, content);
     this.props.onNewMessage(username, content);
-    
+    this.props.changeDefaultUser(username);
   }
 
     return (
