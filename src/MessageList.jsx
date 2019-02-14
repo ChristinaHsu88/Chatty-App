@@ -5,6 +5,7 @@ import Message from './Message.jsx';
 class MessageList extends Component {
   render() {
     const messages = this.props.messages;
+    const user = this.props.user;
     const message = messages.map((eachMessage) => 
       <Message currentUser={eachMessage.username} messages={eachMessage.content} key={eachMessage.id}/>
     )
@@ -13,7 +14,7 @@ class MessageList extends Component {
       <main className="messages">
         {message}
         <div className="message system">
-          Anonymous1 changed their name to nomnom.
+        
         </div>
       </main>
       </div>

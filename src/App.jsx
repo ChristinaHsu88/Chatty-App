@@ -31,7 +31,12 @@ class App extends Component {
 
   changeDefaultUser(username) {
     if (username !== this.state.currentUser.name) {
-      console.log('printing username', username);
+      const notification = {type: "postNotification", content: this.state.currentUser.name + " has changed their name to " + username}
+      //console.log('printing username', username);
+      let newNotify = JSON.stringify(notification);
+      this.socket.send(newNotify);
+      this.setState({currentUser: {name: username}});
+      //console.log(notification);
     }
   }
 
@@ -83,6 +88,7 @@ class App extends Component {
   render() {
       const currentUser = this.state.currentUser.name;
       let messages = this.state.messages;
+      let user = this.state.currentUser.name;
       //console.log(messages);
       
       return (
@@ -90,7 +96,7 @@ class App extends Component {
           <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-          <MessageList messages={messages}/>
+          <MessageList messages={messages} user={user}/>
           <ChatBar currentUser={currentUser} addNewMessage={this.addNewMessage} onNewMessage={this.onNewMessage} changeDefaultUser={this.changeDefaultUser}/>
         </div>
     );

@@ -1,9 +1,9 @@
 // server.js
 
 const express = require('express');
-// const SocketLib = require('ws');
-// const SocketServer = SocketLib.Server;
-const SocketServer = require('ws').Server;
+const SocketLib = require('ws');
+const SocketServer = SocketLib.Server;
+//const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4');
 
 // Set the port to 3001
@@ -24,20 +24,31 @@ const wss = new SocketServer({ server });
 wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('message', (msg) => {
-    const newObj = JSON.parse(msg);
-    newObj.id = uuidv4();
-    newObj.type = "incomingMessage";
-    //console.log('newObj', newObj);
-
-    // wss.broadcast = function broadcast(newObj) {
+    const parsedMsg = JSON.parse(msg);
+    if (parsedMsg.type === 'postMessage') {
+      parsedMsg.id = uuidv4();
+      parsedMsg.type = "incomingMessage";
+      //console.log('newObj', parsedMsg);
+          // wss.broadcast = function broadcast(newObj) {
       wss.clients.forEach(function each(client) {
-        //if (client.readyState === SocketLib.OPEN) {
-        if (client.readyState) { 
-          //console.log('sending the msg to client ready state', client);
-          client.send(JSON.stringify(newObj));
+        if (client.readyState === SocketLib.OPEN) {
+          client.send(JSON.stringify(parsedMsg));
         }
       })
-    // }
+    }
+    if (parsedMsg.type === 'postNotification') {
+      parsedMsg.id = uuidv4();
+      parsedMsg.type = 'incomingNotification';
+      console.log('new username', parsedMsg);
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === SocketLib.OPEN) {
+          client.send(JSON.stringify(parsedMsg));
+        }
+      })
+    }
+    
+
+
 
     //ws.send(newObj);
   })
