@@ -26,17 +26,29 @@ const wss = new SocketServer({ server });
 
 
 let clientNum = {num: 0};
+function colorSetting() {
+  const color = ['#DB4837', '#3075e5', '#9630e5', '#e53030'];
+  const num = Math.floor(Math.random() * 4); //generate num between 1 and 4
+  const pickedColor = color[num];
+  //console.log('the computer has picked a color:', pickedColor);
+  return pickedColor;
+}
+
 wss.on('connection', (ws) => {
   console.log('Client connected');
   //tracking the numbers of online users
   clientNum.num += 1;
   clientNum.id = uuidv4();
+  const color = colorSetting();
+  console.log(color);
+  clientNum.color = color;
   clientNum.type = 'onlineNums'
-  //console.log(clientNum);
+
 
   wss.clients.forEach(function each(client) {
     if (client.readyState === SocketLib.OPEN) {
       client.send(JSON.stringify(clientNum));
+      //console.log(clientNum);
     }
   })
 

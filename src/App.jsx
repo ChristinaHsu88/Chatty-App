@@ -11,7 +11,8 @@ class App extends Component {
     //window.mysocket = this.socket;
     this.state = {
       currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: [
+      textcolor: {}, //orange, blue, purple, red
+      messages: [
           // {
           //   username: "Bob",
           //   content: "Has anyone seen my marbles?",
@@ -28,6 +29,8 @@ class App extends Component {
       this.changeDefaultUser = this.changeDefaultUser.bind(this);
       this.componentDidMount = this.componentDidMount.bind(this);
   }
+
+ 
 
   changeDefaultUser(username) {
     if (username !== this.state.currentUser.name) {
@@ -60,25 +63,28 @@ class App extends Component {
 
     this.socket.onmessage = (message) => {
       let userOnline = JSON.parse(message.data);
-      console.log(userOnline.num);
+  
+      //console.log(userOnline.num);
       if (userOnline.type === "onlineNums") {
-        this.setState({currentUserNum: userOnline.num });
-        console.log('numbers of users online', this.state);
+        console.log('checkout the content', userOnline.color);
+        this.setState({currentUserNum: userOnline.num});
+        this.setState({textcolor: userOnline.color});
+        console.log('should have color and user numbers', this.state);
       }
       
       if (userOnline.type === "incomingMessage") {
         this.setState({messages: [...this.state.messages, userOnline]})
-        console.log('new message', this.state);
+        //console.log('new message', this.state);
       }
 
       if (userOnline.type === "incomingNotification") {
         this.setState({messages: [...this.state.messages, userOnline]})
-        console.log('new notification', this.state);
+        //console.log('new notification', this.state);
       }
 
       if (userOnline.type === "closing windows") {
         this.setState({currentUserNum: userOnline.num });
-        console.log('numbers of users online', this.state);
+        //console.log('numbers of users online', this.state);
       }
     }
   }
@@ -90,8 +96,12 @@ class App extends Component {
       let messages = this.state.messages;
       let user = this.state.currentUser.name;
       let number = this.state.currentUserNum;
-      console.log(this.state);
-      console.log('showing the rendering numbers', number);
+      let color = this.state.textcolor;
+ 
+      // console.log(this.state);
+      //console.log(color);
+      // console.log(this.state);
+      // console.log('showing the rendering numbers', number);
       //console.log(number);
       
       //console.log(this.messages.num);
@@ -111,7 +121,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
           <span className="userCount">{number} user(s) online</span>
           </nav>
-          <MessageList messages={messages} user={user}/>
+          <MessageList messages={messages} user={user} color={color}/>
           <ChatBar currentUser={currentUser}  onNewMessage={this.onNewMessage} changeDefaultUser={this.changeDefaultUser}/>
         </div>
     );
