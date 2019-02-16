@@ -8,21 +8,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.socket = new WebSocket("ws://localhost:3001/");
-    //window.mysocket = this.socket;
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      textcolor: {}, //orange, blue, purple, red
+      currentUser: {name: "Anonymous"}, 
+      textcolor: {}, 
       messages: [
-          // {
-          //   username: "Bob",
-          //   content: "Has anyone seen my marbles?",
-          //   id: 'a'
-          // },
-          // {
-          //   username: "Anonymous",
-          //   content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
-          //   id: 'b'
-          // }
+        
         ]
       };
       this.onNewMessage = this.onNewMessage.bind(this);
@@ -45,7 +35,6 @@ class App extends Component {
   //adding type to the message
   onNewMessage(username, content) {
     if (username && content) { 
-      //console.log(username, content);
       const newMessage = {username: username, content: content, type: "postMessage"};
       let newMsg = JSON.stringify(newMessage);
       this.socket.send(newMsg);
@@ -55,41 +44,33 @@ class App extends Component {
   //deinfed function that set it to children this.props.
   componentDidMount() {
     console.log("componentDidMount <App />");
-    
-    // let online = 0;
+
     this.socket.onopen = () => {
       console.log('connected to server');
     }
 
     this.socket.onmessage = (message) => {
       let userOnline = JSON.parse(message.data);
-  
-      //console.log(userOnline.num);
+
       if (userOnline.type === "onlineNums") {
-        console.log('checkout the content', userOnline.color);
         this.setState({currentUserNum: userOnline.num});
         this.setState({textcolor: userOnline.color});
-        console.log('should have color and user numbers', this.state);
       }
       
       if (userOnline.type === "incomingMessage") {
-        this.setState({messages: [...this.state.messages, userOnline]})
-        //console.log('new message', this.state);
+        console.log('this is the incoming Message', userOnline);
+        this.setState({messages: [...this.state.messages, userOnline]});
       }
 
       if (userOnline.type === "incomingNotification") {
         this.setState({messages: [...this.state.messages, userOnline]})
-        //console.log('new notification', this.state);
       }
 
       if (userOnline.type === "closing windows") {
         this.setState({currentUserNum: userOnline.num });
-        //console.log('numbers of users online', this.state);
       }
     }
   }
-
-
 
   render() {
       const currentUser = this.state.currentUser.name;
@@ -97,24 +78,8 @@ class App extends Component {
       let user = this.state.currentUser.name;
       let number = this.state.currentUserNum;
       let color = this.state.textcolor;
- 
-      // console.log(this.state);
-      //console.log(color);
-      // console.log(this.state);
-      // console.log('showing the rendering numbers', number);
-      //console.log(number);
-      
-      //console.log(this.messages.num);
-      
 
-      //let num = this.state.currentUserNum;
-      //console.log(this.props.currentUserNum);
-      // let currentUserNum = this.state.currentUserNum.num; //online number
-      // console.log(currentUserNum);
-      // console.log('this is the state', this.state);
-      // console.log('this is the first object', this.state.currentUserNum); //showing the object
-      
-      // console.log('this is the number', this.state.currentUserNum.num); //error. where to access this
+
       return (
         <div>
           <nav className="navbar">

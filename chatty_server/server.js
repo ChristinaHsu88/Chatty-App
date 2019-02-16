@@ -40,15 +40,13 @@ wss.on('connection', (ws) => {
   clientNum.num += 1;
   clientNum.id = uuidv4();
   const color = colorSetting();
-  console.log(color);
   clientNum.color = color;
-  clientNum.type = 'onlineNums'
+  clientNum.type = 'onlineNums';
 
 
   wss.clients.forEach(function each(client) {
     if (client.readyState === SocketLib.OPEN) {
       client.send(JSON.stringify(clientNum));
-      //console.log(clientNum);
     }
   })
 
@@ -57,8 +55,7 @@ wss.on('connection', (ws) => {
     if (parsedMsg.type === 'postMessage') {
       parsedMsg.id = uuidv4();
       parsedMsg.type = "incomingMessage";
-      //console.log('newObj', parsedMsg);
-          // wss.broadcast = function broadcast(newObj) {
+  
       wss.clients.forEach(function each(client) {
         if (client.readyState === SocketLib.OPEN) {
           client.send(JSON.stringify(parsedMsg));
@@ -75,11 +72,8 @@ wss.on('connection', (ws) => {
         }
       })
     }
-
-
-    //ws.send(newObj);
   })
-  //  console.log(ws);
+ 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
     clientNum.num -= 1;
@@ -90,6 +84,5 @@ wss.on('connection', (ws) => {
         client.send(JSON.stringify(clientNum));
       }
     })
-    //console.log(clientNum);
     console.log('Client disconnected')});
 });

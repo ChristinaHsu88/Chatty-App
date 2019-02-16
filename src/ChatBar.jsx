@@ -17,8 +17,6 @@ class ChatBar extends Component {
     event.preventDefault();
     const username = event.target.username.value;
     const content = event.target.content.value;
-    // const newMessage = {};
-    //this.props.addNewMessage(username, content);
     this.props.onNewMessage(username, content);
     this.props.changeDefaultUser(username);
   }
