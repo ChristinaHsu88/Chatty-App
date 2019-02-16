@@ -26,12 +26,21 @@ const wss = new SocketServer({ server });
 
 
 let clientNum = {num: 0};
+//set the color theme
 function colorSetting() {
   const color = ['#DB4837', '#3075e5', '#9630e5', '#e53030'];
-  const num = Math.floor(Math.random() * 4); //generate num between 1 and 4
+  const num = Math.floor(Math.random() * 4); 
   const pickedColor = color[num];
-  //console.log('the computer has picked a color:', pickedColor);
   return pickedColor;
+}
+
+//broadcast function
+function broadcast(msg) {
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === SocketLib.OPEN) {
+      client.send(JSON.stringify(msg));
+    }
+  })
 }
 
 wss.on('connection', (ws) => {
@@ -42,13 +51,7 @@ wss.on('connection', (ws) => {
   const color = colorSetting();
   clientNum.color = color;
   clientNum.type = 'onlineNums';
-
-
-  wss.clients.forEach(function each(client) {
-    if (client.readyState === SocketLib.OPEN) {
-      client.send(JSON.stringify(clientNum));
-    }
-  })
+  broadcast(clientNum);
 
   ws.on('message', (msg) => {
     const parsedMsg = JSON.parse(msg);
@@ -56,21 +59,14 @@ wss.on('connection', (ws) => {
       parsedMsg.id = uuidv4();
       parsedMsg.type = "incomingMessage";
   
-      wss.clients.forEach(function each(client) {
-        if (client.readyState === SocketLib.OPEN) {
-          client.send(JSON.stringify(parsedMsg));
-        }
-      })
+      broadcast(parsedMsg);
     }
     if (parsedMsg.type === 'postNotification') {
       parsedMsg.id = uuidv4();
       parsedMsg.type = 'incomingNotification';
       console.log('new username', parsedMsg);
-      wss.clients.forEach(function each(client) {
-        if (client.readyState === SocketLib.OPEN) {
-          client.send(JSON.stringify(parsedMsg));
-        }
-      })
+
+      broadcast(parsedMsg);
     }
   })
  
@@ -79,10 +75,7 @@ wss.on('connection', (ws) => {
     clientNum.num -= 1;
     clientNum.id = uuidv4();
     clientNum.type = 'closing windows';
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === SocketLib.OPEN) {
-        client.send(JSON.stringify(clientNum));
-      }
-    })
+
+    broadcast(clientNum);
     console.log('Client disconnected')});
 });
