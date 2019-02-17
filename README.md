@@ -1,4 +1,4 @@
-React Boilerplate
+React Chatty App
 =====================
 
 A minimal and light dev environment for ReactJS.
@@ -11,17 +11,13 @@ A minimal and light dev environment for ReactJS.
 
 ### Usage
 
-Clone the boilerplate and create your own git repo.
+Fork and clone the Chatty App
 
 ```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
+git clone git@github.com:ChristinaHsu88/Chatty-App.git
+cd chattyApp
 ```
-
-Install the dependencies and start the server.
+Install the dependencies on package.json file and start the server (see the following):
 
 ```
 npm install
@@ -29,15 +25,23 @@ npm start
 open http://localhost:3000
 ```
 
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Dependencies
-
+### Dependencies 
 * React
+* React-dom
 * Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+
+### Dev Dependencies
+* babel-core
+* babel-loader
+* babel-preset-es2015
+* babel-preset-react
+* babel-preset-stage-0
+* css-loader"
+* eslint
+* eslint-plugin-react
+* node-sass
+* sass-loader
+* sockjs-client
+* style-loader
+* webpack
+* webpack-dev-server
