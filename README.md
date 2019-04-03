@@ -1,47 +1,22 @@
-React Chatty App
-=====================
+# CHATTY-APP
+A real-time chatroom web
+app built with React.js which allows users to communicate
+with each other without
+reloading the page
 
-A minimal and light dev environment for ReactJS.
+## GETTING STARTED
+1. Clone this repository by running `git clone git@github.com:ChristinaHsu88/Chatty-App.git` command.
+2. Go into the folder `cd Chatty-App`
+3. Install dependencies using the `npm install` command.
+4. Start the web server using the `npm run local` command. The app will be served at <http://http://localhost:3000/>.
 
-### ScreenShots
-
-!["Screenshot of single user page"](https://github.com/ChristinaHsu88/boiler-plate/blob/master/docs/OneScreen.png)
-
-!["Screenshot of multiple users page"](https://github.com/ChristinaHsu88/boiler-plate/blob/master/docs/twoScreens.png)
-
-### Usage
-
-Fork and clone the Chatty App
-
-```
-git clone git@github.com:ChristinaHsu88/Chatty-App.git
-cd chattyApp
-```
-Install the dependencies on package.json file and start the server (see the following):
-
-```
-npm install
-npm start
-open http://localhost:3000
-```
-
-### Dependencies 
-* React
-* React-dom
+## TECH STACK
+* React.js
 * Webpack
 
-### Dev Dependencies
-* babel-core
-* babel-loader
-* babel-preset-es2015
-* babel-preset-react
-* babel-preset-stage-0
-* css-loader"
-* eslint
-* eslint-plugin-react
-* node-sass
-* sass-loader
-* sockjs-client
-* style-loader
-* webpack
-* webpack-dev-server
+## SCREENSHOTS
+!["Screenshot of single user page"](https://github.com/ChristinaHsu88/boiler-plate/blob/master/docs/OneScreen.png)
+
+* Real-time chatting across pages
+!["Screenshot of multiple users page"](https://github.com/ChristinaHsu88/boiler-plate/blob/master/docs/twoScreens.png)
+
